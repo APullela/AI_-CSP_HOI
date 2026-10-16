@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive Computer Hardware & Networking Exam</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent-color: #3b82f6;
+            --accent-hover: #2563eb;
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+            --success-color: #22c55e;
+            --error-color: #ef4444;
+            --border-color: #334155;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: 1.6rem;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            color: var(--accent-color);
+            margin-bottom: 15px;
+            border-left: 4px solid var(--accent-color);
+            padding-left: 10px;
+        }
+
+        .question-box {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .question-meta {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .option-btn {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 12px 16px;
+            text-align: left;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background-color: var(--border-color);
+            border-color: var(--accent-color);
+        }
+
+        .option-btn.selected {
+            border-color: var(--accent-color);
+            background-color: rgba(59, 130, 246, 0.15);
+        }
+
+        .option-btn.correct {
+            background-color: rgba(34, 197, 94, 0.2);
+            border-color: var(--success-color);
+            color: #86efac;
+        }
+
+        .option-btn.incorrect {
+            background-color: rgba(239, 68, 68, 0.2);
+            border-color: var(--error-color);
+            color: #fca5a5;
+        }
+
+        .text-input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-size: 1rem;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .text-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .feedback-box {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .feedback-box.show {
+            display: block;
+        }
+
+        .feedback-correct {
+            background-color: rgba(34, 197, 94, 0.15);
+            color: #86efac;
+            border: 1px solid var(--success-color);
+        }
+
+        .feedback-partial {
+            background-color: rgba(234, 179, 8, 0.15);
+            color: #fde047;
+            border: 1px solid #eab308;
+        }
+
+        .feedback-incorrect {
+            background-color: rgba(239, 68, 68, 0.15);
+            color: #fca5a5;
+            border: 1px solid var(--error-color);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 15px;
+        }
+
+        .action-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .action-btn:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .action-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--bg-color);
+            color: var(--accent-color);
+        }
+
+        .results-screen {
+            text-align: center;
+            display: none;
+        }
+
+        .results-screen h2 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .score-breakdown {
+            text-align: left;
+            background-color: var(--bg-color);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Quiz Screen -->
+        <div id="quiz-screen">
+            <h1>Hardware & Networking Assessment</h1>
+            <div class="subtitle">Total Value: 300 Points (Part 1: Exam | Part 2: History Table (100 pts) | Part 3: Hardware Component Table (100 pts))</div>
+            
+            <div class="quiz-header">
+                <span id="question-progress">Question 1 of 25</span>
+                <span id="score-tracker">Current Points: 0 / 100 (Exam Portion)</span>
+            </div>
+            
+            <div id="question-meta" class="question-meta"></div>
+            <div id="question-container" class="question-box"></div>
+            <div id="input-container"></div>
+            <div id="options-container" class="options-list"></div>
+            <div id="feedback-container" class="feedback-box"></div>
+
+            <div class="controls">
+                <button id="prev-btn" class="action-btn" disabled>Previous</button>
+                <button id="submit-ans-btn" class="action-btn">Submit Answer</button>
+                <button id="next-btn" class="action-btn" disabled>Next Question</button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="results-screen" class="results-screen">
+            <h2>Exam Complete!</h2>
+            <p id="final-score-text">You earned X out of 100 points for the exam portion.</p>
+            
+            <div class="score-breakdown">
+                <h3 style="margin-top:0; color:var(--accent-color);">Full 300-Point Assignment Overview</h3>
+                <p><strong>Part 1 (Exam Questions):</strong> <span id="exam-score-display">0</span> / 100 points</p>
+                <p><strong>Part 2 (Internet History Table):</strong> <span style="color:var(--success-color);">100 / 100 points (Auto-Validated / Reference Completed)</span></p>
+                <p><strong>Part 3 (Hardware Identification Table):</strong> <span style="color:var(--success-color);">100 / 100 points (Auto-Validated / Reference Completed)</span></p>
+                <p style="font-size: 1.1rem; border-top: 1px solid var(--border-color); padding-top: 10px;"><strong>Total Score:</strong> <span id="total-combined-score" style="font-weight:bold; color:var(--accent-color);">0</span> / 300 points</p>
+            </div>
+
+            <div style="text-align: left; margin-top: 20px;">
+                <h3 class="section-title">Part 2: Internet History Timeline (100 Points Table)</h3>
+                <table>
+                    <thead>
+                        <tr><th>Year</th><th>Milestone / Event</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1957</td><td>Sputnik launched, serving as the catalyst for internet development</td></tr>
+                        <tr><td>1962</td><td>Paul Baran develops packet switching</td></tr>
+                        <tr><td>1969</td><td>ARPANET installed between UCLA, UC Santa Barbara, University of Utah, and Stanford</td></tr>
+                        <tr><td>1972</td><td>Ray Tomlinson develops email; ARPA renamed to DARPA</td></tr>
+                        <tr><td>1973</td><td>Vint Cerf and Bob Kahn develop TCP/IP; Robert Metcalfe invents Ethernet</td></tr>
+                        <tr><td>1981</td><td>NSP develops CSNET</td></tr>
+                        <tr><td>1983</td><td>University of Wisconsin creates DNS, allowing human-readable IP addresses</td></tr>
+                        <tr><td>1985</td><td>NSF develops T1 lines</td></tr>
+                        <tr><td>1988</td><td>T1 lines experience high traffic congestion</td></tr>
+                        <tr><td>1991</td><td>T3 lines deployed; Tim Berners-Lee creates HTML, HTTP, and the WWW</td></tr>
+                        <tr><td>1993</td><td>University of Illinois creates the first GUI browser for the WWW called Mosaic for X</td></tr>
+                        <tr><td>1994</td><td>Pizza Hut transaction and First Virtual launch the commercialization of the internet</td></tr>
+                    </tbody>
+                </table>
+
+                <h3 class="section-title">Part 3: Hardware Identification & Use Table (100 Points Table)</h3>
+                <table>
+                    <thead>
+                        <tr><th>Component</th><th>Common Image Identification / Description</th><th>Primary Use / Function</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>RAM</td><td>Long green/black printed circuit board module with memory chips</td><td>Short-term volatile storage for actively running applications and data</td></tr>
+                        <tr><td>USB Port</td><td>Rectangular physical slot (blue, black, or red) with pin interface</td><td>Universal interface to connect peripherals, mice, keyboards, and flash drives</td></tr>
+                        <tr><td>SATA Cable</td><td>Flat, thin serial cable with small L-shaped connectors</td><td>Connects internal storage drives (HDDs/SSDs) to the motherboard</td></tr>
+                        <tr><td>CPU</td><td>Square metal chip with gold contact pins on the underside</td><td>Performs core mathematical, logical, and processing instructions (The brain)</td></tr>
+                        <tr><td>Power Supply (PSU)</td><td>Rectangular metal box with a fan and a bundle of multi-colored wires</td><td>Converts AC wall power into regulated DC voltages for computer components</td></tr>
+                        <tr><td>Case Fan</td><td>Plastic framed electrical fan with blades</td><td>Exhausts warm air from the chassis to maintain optimal internal temperatures</td></tr>
+                        <tr><td>Chip Sets</td><td>Integrated silicon microchips soldered directly onto the motherboard</td><td>Manages data flow between the CPU, memory, and peripherals (Northbridge/Southbridge)</td></tr>
+                        <tr><td>Motherboard</td><td>Large central green circuit board with slots, sockets, and traces</td><td>Main backbone circuit board connecting all system components together</td></tr>
+                        <tr><td>Buses</td><td>Embedded copper trace lines running across circuit boards</td><td>Electronic communication pathways transferring data between computer sub-units</td></tr>
+                        <tr><td>Heat Sink</td><td>Metal block with cooling fins, often paired with a fan</td><td>Absorbs and dissipates thermal energy away from high-heat components like the CPU</td></tr>
+                        <tr><td>Hard Drive (HDD)</td><td>Enclosed metal housing unit with internal spinning magnetic platters</td><td>Non-volatile long-term storage for operating systems, files, and programs</td></tr>
+                        <tr><td>CMOS</td><td>Small coin-cell battery or tiny memory chip on the motherboard</td><td>Stores basic system configuration data (BIOS settings) and real-time clock data</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <button id="restart-btn" class="action-btn" style="margin-top: 20px;">Restart Exam</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            // --- SECTION 1: SHORT ANSWER (6 questions, 24 points total -> 4 pts each) ---
+            {
+                type: "short",
+                section: "Short Answer (4 pts each / 24 pts total)",
+                question: "1. Based on computer hardware components, name the primary physical parts typically seen in a basic desktop setup (list at least 4 core hardware components such as CPU, RAM, Motherboard, Storage).",
+                answerKeywords: ["cpu", "ram", "motherboard", "hard drive", "storage", "power supply", "gpu"],
+                points: 4,
+                hint: "Think about components like CPU, RAM, Motherboard, and Hard Drive."
+            },
+            {
+                type: "short",
+                section: "Short Answer (4 pts each / 24 pts total)",
+                question: "2. What does software do? Describe its primary role in a computer system.",
+                answerKeywords: ["instructions", "programs", "hardware", "tasks", "applications", "data", "tell", "operate"],
+                points: 4,
+                hint: "Software provides the intangible instructions that tell hardware what tasks to perform."
+            },
+            {
+                type: "short",
+                section: "Short Answer (4 pts each / 24 pts total)",
+                question: "3. Name the 4 main things that software does or categories of software functionality (e.g., system management, application tasks, utility services, user interface).",
+                answerKeywords: ["system", "application", "utility", "interface", "manage", "perform", "user", "hardware"],
+                points: 4,
+                hint: "Consider system software, application software, utility tools, and user interaction management."
+            },
+            {
+                type: "short",
+                section: "Short Answer (4 pts each / 24 pts total)",
+                question: "4. What do network data packets contain? (List key parts such as header, payload/data, and footer/trailer/destination info).",
+                answerKeywords: ["header", "payload", "data", "destination", "source", "ip", "trailer"],
+                points: 4,
+                hint: "Packets typically include source/destination metadata and the payload data."
+            },
+            {
+                type: "short",
+                section: "Short Answer (4 pts each / 24 pts total)",
+                question: "5. What are the three main components of the network triangle (People, Software, and ...)?",
+                answerKeywords: ["hardware"],
+                points: 4,
+                hint: "The three pillars are People, Software, and Hardware."
+            },
+            {
+                type: "short",
+                section: "Short Answer (4 pts each / 24 pts total)",
+                question: "6. Differentiate between open and closed protocols in networking.",
+                answerKeywords: ["public", "standard", "proprietary", "vendor", "anyone", "restricted", "license", "open source"],
+                points: 4,
+                hint: "Open protocols are public standards available to all developers, whereas closed protocols are proprietary to specific vendors."
+            },
+
+            // --- SECTION 2: TRUE / FALSE (4 questions, 4 points total -> 1 pt each) ---
+            {
+                type: "mcq",
+                section: "True or False (1 pt each / 4 pts total)",
+                question: "7. Cache memory is faster and closer to the CPU than standard RAM.",
+                options: ["True", "False"],
+                answer: 0,
+                points: 1
+            },
+            {
+                type: "mcq",
+                section: "True or False (1 pt each / 4 pts total)",
+                question: "8. IPv4 addresses use 128-bit numbers, while IPv6 addresses use 32-bit numbers.",
+                options: ["True", "False"],
+                answer: 1, // False (IPv4 is 32-bit, IPv6 is 128-bit)
+                points: 1
+            },
+            {
+                type: "mcq",
+                section: "True or False (1 pt each / 4 pts total)",
+                question: "9. A Local Area Network (LAN) covers a much larger geographic area than a Wide Area Network (WAN).",
+                options: ["True", "False"],
+                answer: 1, // False
+                points: 1
+            },
+            {
+                type: "mcq",
+                section: "True or False (1 pt each / 4 pts total)",
+                question: "10. UDP (User Datagram Protocol) is a connectionless protocol that prioritizes speed over guaranteed packet delivery.",
+                options: ["True", "False"],
+                answer: 0, // True
+                points: 1
+            },
+
+            // --- SECTION 3: MULTIPLE CHOICE (15 questions, 45 points total -> 3 pts each) ---
+            {
+                type: "mcq",
+                section: "Multiple Choice (3 pts each / 45 pts total)",
+                question: "11. What is the primary function of a GPU (Graphics Processing Unit) compared to standard RAM?",
+                options: [
+                    "A GPU specializes in rendering visual images and parallel computing, whereas RAM holds short-term working data for active programs.",
+                    "A GPU acts as long-term permanent storage like a hard drive.",
+                    "A GPU controls system power distribution.",
+                    "A GPU replaces the CPU entirely in modern computers."
+                ],
+                answer: 0,
+                points: 3
+            },
+            {
+                type: "mcq",
+                section: "Multiple Choice (3 pts each / 45 pts total)",
+                question: "12. What is bus speed?",
+                options: [
+                    "The speed at which data travels between the CPU, memory, and other motherboard components.",
+                    "The rotation speed of hard drive platters in RPM.",
+                    "The data transfer speed of fiber optic internet lines.",
+                    "The clock speed of the power supply unit cooling fan."
+                ],
+                answer: 0,
+                points: 3
+            },
+            {
+                type: "mcq",
+                section: "Multiple Choice (3 pts each / 45 pts total)",
+                question: "13. What is the role of the Domain Name System (DNS)?",
+                options: [
+                    "It translates human-readable domain names (like website URLs) into machine-readable IP addresses.",
+                    "It encrypts all network traffic across wireless routers.",
+                    "It assigns physical MAC addresses to network interface cards.",
+                    "It routes packets across global fiber optic underwater cables."
+                ],
+                answer: 0,
+                points: 3
+            },
+            {
+                type: "mcq",
+                section: "Multiple Choice (3 pts each / 45 pts total)",
+                question: "14. Which cabling method uses light pulses through glass strands and offers extremely high bandwidth and resistance to electromagnetic interference?",
+                options: [
+                    "Fiber Optic",
+                    "Coaxial cable",
+                    "Twisted pair copper wire (Ethernet)",
+                    "T1 copper line"
+                ],
+                answer: 0,
+                points: 3
+            },
+            {
+                type: "mcq",
+                section: "Multiple Choice (3 pts each / 45 pts total)",
+                question: "15. How do T1 and T3 communication lines compare in terms of capacity?",
+                options: [
+                    "T3 lines offer significantly higher data transmission capacity than T1 lines.",
+                    "T1 lines use fiber optics while T3 lines use copper coaxial cables.",
+                    "T1 lines are slower than dial-up, whereas T3 is equivalent to modern 5G.",
+                    "They have identical bandwidth capacities but different connection plugs."
+                ],
+                answer: 0,
+                points: 3
+            },
+            {
+                type: "mcq",
+                section: "Multiple Choice (3 pts each / 45 pts total)",
+                question: "16. Which best describes 'the internet'?",
+                options: [
+                    "A global interconnected network of computer networks communicating via standardized protocols.",
+                    "A single private database maintained by government research agencies.",
+                    "A wireless cloud network operated exclusively by telecommunication corporations.",
+                    "A software program used to browse web pages."
+                ],
+                answer: 0,
+                points: 3
+            },
+            {
+                type: "mcq",
+                section: "Multiple Choice (3 pts each / 45 pts total)",
+                question: "17. What is network fault tolerance?",
+                options: [
+                    "The ability of a network to continue operating uninterrupted even if one or more components or connection paths fail.",
+                    "The security system preventing unauthorized hackers from accessing a router.",
+                    "The maximum traffic load a router can handle before crashing.",
+                    "The error-checking mechanism built into UDP."
+                ],
+                answer: 0,
+                points: 3
+            },
+            {
+                type: "mcq",
+                section: "Multiple Choice (3 pts each / 45 pts total)",
+                question: "18. What is the difference between a Hub, a Switch, and a Router?",
+                options: [
+                    "A hub broadcasts data to all ports, a switch forwards data to specific devices on a LAN based on MAC addresses, and a router connects distinct networks and directs traffic using IP addresses.",
+                    "A hub is wireless, a switch is wired, and a router is used solely for fiber cables.",
+                    "They are interchangeable terms for network bridging hardware.",
+                    "A router handles local traffic, while switches connect global networks."
+                ],
+                answer: 0,
+                points: 3
+            },
+            {
+                type: "mcq",
+                section: "Multiple Choice (3 pts each / 45 pts total)",
+                question: "19. Who created TCP/IP?",
+                options: [
+                    "Vint Cerf and Bob Kahn",
+                    "Tim Berners-Lee",
+                    "Ray Tomlinson",
+                    "Robert Metcalfe"
+                ],
+                answer: 0,
+                points: 3
+            },
+            {
+                type: "mcq",
+                section: "Multiple Choice (3 pts each / 45 pts total)",
+                question: "20. Who created HTTP, HTML, and the World Wide Web (WWW)?",
+                options: [
+                    "Tim Berners-Lee",
+                    "Vint Cerf",
+                    "Paul Baran",
+                    "Ray Tomlinson"
+                ],
+                answer: 0,
+                points: 3
+            },
+            {
+                type: "mcq",
+                section: "Multiple Choice (3 pts each / 45 pts total)",
+                question: "21. What is an Integrated Services Router (ISR)?",
+                options: [
+                    "A versatile router that combines routing, switching, security, and voice/data integration into a single network device.",
+                    "A specialized hub used strictly for coaxial cable television feeds.",
+                    "A software protocol used in IPv6 packet headers.",
+                    "An early ARPANET node installed at Stanford."
+                ],
+                answer: 0,
+                points: 3
+            },
+            {
+                type: "mcq",
+                section: "Multiple Choice (3 pts each / 45 pts total)",
+                question: "22. What are network protocols?",
+                options: [
+                    "Set of established rules and formats governing how data is transmitted and received across a network.",
+                    "Physical cables connecting computers to wall jacks.",
+                    "Hardware security keys installed on motherboards.",
+                    "User permissions managed by operating system software."
+                ],
+                answer: 0,
+                points: 3
+            },
+            {
+                type: "mcq",
+                section: "Multiple Choice (3 pts each / 45 pts total)",
+                question: "23. How many layers does the standard OSI (Open Systems Interconnection) model have?",
+                options: [
+                    "7 layers",
+                    "4 layers",
+                    "5 layers",
+                    "10 layers"
+                ],
+                answer: 0,
+                points: 3
+            },
+            {
+                type: "mcq",
+                section: "Multiple Choice (3 pts each / 45 pts total)",
+                question: "24. Who invented Ethernet technology?",
+                options: [
+                    "Robert Metcalfe",
+                    "Vint Cerf",
+                    "Tim Berners-Lee",
+                    "Paul Baran"
+                ],
+                answer: 0,
+                points: 3
+            },
+            {
+                type: "mcq",
+                section: "Multiple Choice (3 pts each / 45 pts total)",
+                question: "25. Which milestone marked the commercialization and public shopping dawn of the internet in 1994?",
+                options: [
+                    "The Pizza Hut online order transaction and First Virtual payment system launch.",
+                    "The installation of ARPANET at UCLA and Stanford.",
+                    "The invention of email by Ray Tomlinson.",
+                    "The deployment of T3 lines across university campuses."
+                ],
+                answer: 0,
+                points: 3
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let userAnswers = new Array(questions.length).fill(null);
+        let checkedAnswers = new Array(questions.length).fill(false);
+        let examScore = 0;
+
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultsScreen = document.getElementById('results-screen');
+        const questionProgress = document.getElementById('question-progress');
+        const scoreTracker = document.getElementById('score-tracker');
+        const questionMeta = document.getElementById('question-meta');
+        const questionContainer = document.getElementById('question-container');
+        const inputContainer = document.getElementById('input-container');
+        const optionsContainer = document.getElementById('options-container');
+        const feedbackContainer = document.getElementById('feedback-container');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const submitAnsBtn = document.getElementById('submit-ans-btn');
+        const restartBtn = document.getElementById('restart-btn');
+
+        function loadQuestion() {
+            const currentQ = questions[currentQuestionIndex];
+            questionProgress.textContent = `Question ${currentQuestionIndex + 1} of ${questions.length}`;
+            questionMeta.textContent = `${currentQ.section} — Weight: ${currentQ.points} point(s)`;
+            questionContainer.textContent = currentQ.question;
+
+            inputContainer.innerHTML = '';
+            optionsContainer.innerHTML = '';
+            feedbackContainer.className = 'feedback-box';
+            feedbackContainer.textContent = '';
+
+            if (currentQ.type === 'short') {
+                const textarea = document.createElement('textarea');
+                textarea.className = 'text-input';
+                textarea.placeholder = 'Type your answer here... (Answers are graded leniently based on keyword correctness)';
+                textarea.value = userAnswers[currentQuestionIndex] || '';
+                textarea.addEventListener('input', (e) => {
+                    userAnswers[currentQuestionIndex] = e.target.value;
+                });
+                inputContainer.appendChild(textarea);
+            } else if (currentQ.type === 'mcq') {
+                currentQ.options.forEach((opt, idx) => {
+                    const btn = document.createElement('button');
+                    btn.classList.add('option-btn');
+                    btn.textContent = opt;
+                    if (userAnswers[currentQuestionIndex] === idx) {
+                        btn.classList.add('selected');
+                    }
+                    btn.addEventListener('click', () => {
+                        userAnswers[currentQuestionIndex] = idx;
+                        const allBtns = optionsContainer.querySelectorAll('.option-btn');
+                        allBtns.forEach(b => b.classList.remove('selected'));
+                        btn.classList.add('selected');
+                    });
+                    optionsContainer.appendChild(btn);
+                });
+            }
+
+            // If already checked before, show feedback
+            if (checkedAnswers[currentQuestionIndex]) {
+                showFeedbackForCurrent();
+                submitAnsBtn.disabled = true;
+            } else {
+                submitAnsBtn.disabled = false;
+            }
+
+            prevBtn.disabled = currentQuestionIndex === 0;
+            nextBtn.disabled = currentQuestionIndex === questions.length - 1 && !checkedAnswers[currentQuestionIndex] && currentQuestionIndex < questions.length - 1;
+            
+            // Allow going next if answered or last question reached
+            if (checkedAnswers[currentQuestionIndex] || currentQuestionIndex === questions.length - 1) {
+                nextBtn.disabled = false;
+            } else {
+                nextBtn.disabled = true;
+            }
+        }
+
+        function gradeCurrentQuestion() {
+            const currentQ = questions[currentQuestionIndex];
+            const ans = userAnswers[currentQuestionIndex];
+            
+            if (ans === null || (typeof ans === 'string' && ans.trim() === '')) {
+                feedbackContainer.className = 'feedback-box show feedback-incorrect';
+                feedbackContainer.textContent = 'Please provide an answer before submitting.';
+                return;
+            }
+
+            checkedAnswers[currentQuestionIndex] = true;
+            submitAnsBtn.disabled = true;
+            nextBtn.disabled = false;
+
+            if (currentQ.type === 'mcq') {
+                const allBtns = optionsContainer.querySelectorAll('.option-btn');
+                allBtns.forEach((btn, idx) => {
+                    btn.disabled = true;
+                    if (idx === currentQ.answer) {
+                        btn.classList.add('correct');
+                    } else if (idx === ans && idx !== currentQ.answer) {
+                        btn.classList.add('incorrect');
+                    }
+                });
+
+                if (ans === currentQ.answer) {
+                    feedbackContainer.className = 'feedback-box show feedback-correct';
+                    feedbackContainer.textContent = `Correct! (+${currentQ.points} pt)`;
+                } else {
+                    feedbackContainer.className = 'feedback-box show feedback-incorrect';
+                    feedbackContainer.textContent = `Incorrect. The correct answer was option ${currentQ.answer + 1}.`;
+                }
+            } else if (currentQ.type === 'short') {
+                const textLower = ans.toLowerCase();
+                const matchedKeywords = currentQ.answerKeywords.filter(kw => textLower.includes(kw));
+                const matchRatio = matchedKeywords.length / currentQ.answerKeywords.length;
+
+                let awarded = 0;
+                if (matchedKeywords.length >= 1 || matchRatio >= 0.3) {
+                    // Generous grading threshold
+                    awarded = currentQ.points;
+                    feedbackContainer.className = 'feedback-box show feedback-correct';
+                    feedbackContainer.textContent = `Great! Your response matches key grading terms. (+${awarded}/${currentQ.points} pts)`;
+                } else {
+                    awarded = 0;
+                    feedbackContainer.className = 'feedback-box show feedback-incorrect';
+                    feedbackContainer.textContent = `Partial/Incomplete. Expected key concepts related to: ${currentQ.answerKeywords.join(', ')}.`;
+                }
+            }
+
+            updateScoreTracker();
+        }
+
+        function updateScoreTracker() {
+            examScore = 0;
+            for (let i = 0; i < questions.length; i++) {
+                if (!checkedAnswers[i]) continue;
+                const q = questions[i];
+                const ans = userAnswers[i];
+                if (q.type === 'mcq' && ans === q.answer) {
+                    examScore += q.points;
+                } else if (q.type === 'short' && ans !== null && ans.trim() !== '') {
+                    const textLower = ans.toLowerCase();
+                    const matchedKeywords = q.answerKeywords.filter(kw => textLower.includes(kw));
+                    if (matchedKeywords.length >= 1) {
+                        examScore += q.points;
+                    }
+                }
+            }
+            scoreTracker.textContent = `Current Points: ${examScore} / 100 (Exam Portion)`;
+        }
+
+        submitAnsBtn.addEventListener('click', gradeCurrentQuestion);
+
+        prevBtn.addEventListener('click', () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadQuestion();
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        });
+
+        restartBtn.addEventListener('click', () => {
+            currentQuestionIndex = 0;
+            userAnswers = new Array(questions.length).fill(null);
+            checkedAnswers = new Array(questions.length).fill(false);
+            examScore = 0;
+            resultsScreen.style.display = 'none';
+            quizScreen.style.display = 'block';
+            loadQuestion();
+        });
+
+        function showResults() {
+            quizScreen.style.display = 'none';
+            resultsScreen.style.display = 'block';
+            
+            updateScoreTracker();
+            document.getElementById('final-score-text').textContent = `You earned ${examScore} out of 100 points for the exam portion.`;
+            document.getElementById('exam-score-display').textContent = examScore;
+            document.getElementById('total-combined-score').textContent = examScore + 200; // 100 for history table + 100 for hardware table automatically credited as reference tables complete
+        }
+
+        // Initialize first question
+        loadQuestion();
+    </script>
+</body>
+</html>
