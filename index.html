@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comprehensive Computer Hardware & Networking Exam</title>
+    <title>Hardware, Networking & History Learning Hub</title>
     <style>
         :root {
             --bg-color: #0f172a;
@@ -31,7 +31,7 @@
 
         .container {
             width: 100%;
-            max-width: 800px;
+            max-width: 850px;
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 12px;
@@ -51,8 +51,51 @@
         .subtitle {
             text-align: center;
             color: var(--text-muted);
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             font-size: 0.95rem;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .menu-card {
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+
+        .menu-card:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            background-color: rgba(59, 130, 246, 0.05);
+        }
+
+        .menu-card h3 {
+            margin: 0 0 8px 0;
+            color: var(--accent-color);
+            font-size: 1.2rem;
+        }
+
+        .menu-card p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .view-section {
+            display: none;
+        }
+
+        .view-section.active {
+            display: block;
         }
 
         .quiz-header {
@@ -165,12 +208,6 @@
             border: 1px solid var(--success-color);
         }
 
-        .feedback-partial {
-            background-color: rgba(234, 179, 8, 0.15);
-            color: #fde047;
-            border: 1px solid #eab308;
-        }
-
         .feedback-incorrect {
             background-color: rgba(239, 68, 68, 0.15);
             color: #fca5a5;
@@ -207,6 +244,15 @@
             cursor: not-allowed;
         }
 
+        .secondary-btn {
+            background-color: var(--border-color);
+            color: var(--text-color);
+        }
+
+        .secondary-btn:hover {
+            background-color: #475569;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -226,37 +272,56 @@
             color: var(--accent-color);
         }
 
-        .results-screen {
-            text-align: center;
-            display: none;
-        }
-
-        .results-screen h2 {
-            font-size: 1.8rem;
-            margin-bottom: 10px;
-        }
-
-        .score-breakdown {
-            text-align: left;
-            background-color: var(--bg-color);
-            padding: 15px;
-            border-radius: 8px;
-            margin: 20px 0;
+        .table-input {
+            width: 100%;
+            padding: 8px;
+            border-radius: 6px;
             border: 1px solid var(--border-color);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            box-sizing: border-box;
+        }
+
+        .table-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <!-- Quiz Screen -->
-        <div id="quiz-screen">
-            <h1>Hardware & Networking Assessment</h1>
-            <div class="subtitle">Total Value: 300 Points (Part 1: Exam | Part 2: History Table (100 pts) | Part 3: Hardware Component Table (100 pts))</div>
+        <!-- MAIN MENU SCREEN -->
+        <div id="menu-screen" class="view-section active">
+            <h1>Hardware, Networking & History Learning Hub</h1>
+            <div class="subtitle">Select a section below to study, take the exam, or complete the interactive tables. Every multiple-choice answer is purposefully option A!</div>
             
+            <div class="menu-grid">
+                <div class="menu-card" onclick="switchView('exam-view')">
+                    <h3>📝 Part 1: Main Exam (100 Points)</h3>
+                    <p>6 Short Answer questions, 4 True/False questions, and 15 Multiple Choice questions (Note: All MCQ answers are Option A!).</p>
+                </div>
+                <div class="menu-card" onclick="switchView('history-table-view')">
+                    <h3>📅 Part 2: Internet History Timeline Table (100 Points)</h3>
+                    <p>Interactive table allowing you to fill in or review historical milestones from Sputnik (1957) to Commercialization (1994).</p>
+                </div>
+                <div class="menu-card" onclick="switchView('hardware-table-view')">
+                    <h3>💻 Part 3: Hardware Identification Table (100 Points)</h3>
+                    <p>Interactive table allowing you to name hardware components, describe their image appearance, and state their primary use.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PART 1: EXAM VIEW -->
+        <div id="exam-view" class="view-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h2 style="margin:0; font-size:1.3rem; color:var(--accent-color);">Part 1: Main Exam</h2>
+                <button class="action-btn secondary-btn" onclick="switchView('menu-screen')">⬅ Back to Menu</button>
+            </div>
+
             <div class="quiz-header">
                 <span id="question-progress">Question 1 of 25</span>
-                <span id="score-tracker">Current Points: 0 / 100 (Exam Portion)</span>
+                <span id="score-tracker">Score: 0 / 100</span>
             </div>
             
             <div id="question-meta" class="question-meta"></div>
@@ -266,126 +331,113 @@
             <div id="feedback-container" class="feedback-box"></div>
 
             <div class="controls">
-                <button id="prev-btn" class="action-btn" disabled>Previous</button>
+                <button id="prev-btn" class="action-btn secondary-btn" disabled>Previous</button>
                 <button id="submit-ans-btn" class="action-btn">Submit Answer</button>
                 <button id="next-btn" class="action-btn" disabled>Next Question</button>
             </div>
         </div>
 
-        <!-- Results Screen -->
-        <div id="results-screen" class="results-screen">
-            <h2>Exam Complete!</h2>
-            <p id="final-score-text">You earned X out of 100 points for the exam portion.</p>
+        <!-- PART 2: HISTORY TABLE VIEW -->
+        <div id="history-table-view" class="view-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h2 style="margin:0; font-size:1.3rem; color:var(--accent-color);">Part 2: Internet History Timeline (100 Points Table)</h2>
+                <button class="action-btn secondary-btn" onclick="switchView('menu-screen')">⬅ Back to Menu</button>
+            </div>
+            <p class="subtitle" style="text-align:left; margin-bottom:15px;">Fill in or review the milestone descriptions for each historical year. Click grade to check your completion.</p>
             
-            <div class="score-breakdown">
-                <h3 style="margin-top:0; color:var(--accent-color);">Full 300-Point Assignment Overview</h3>
-                <p><strong>Part 1 (Exam Questions):</strong> <span id="exam-score-display">0</span> / 100 points</p>
-                <p><strong>Part 2 (Internet History Table):</strong> <span style="color:var(--success-color);">100 / 100 points (Auto-Validated / Reference Completed)</span></p>
-                <p><strong>Part 3 (Hardware Identification Table):</strong> <span style="color:var(--success-color);">100 / 100 points (Auto-Validated / Reference Completed)</span></p>
-                <p style="font-size: 1.1rem; border-top: 1px solid var(--border-color); padding-top: 10px;"><strong>Total Score:</strong> <span id="total-combined-score" style="font-weight:bold; color:var(--accent-color);">0</span> / 300 points</p>
+            <table>
+                <thead>
+                    <tr><th style="width: 20%;">Year</th><th>Milestone / Event Description</th></tr>
+                </thead>
+                <tbody id="history-tbody">
+                    <!-- Populated via JS -->
+                </tbody>
+            </table>
+
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <button class="action-btn" onclick="gradeHistoryTable()">Grade Table</button>
+                <span id="history-score-display" style="font-weight: bold; color: var(--success-color);"></span>
             </div>
+        </div>
 
-            <div style="text-align: left; margin-top: 20px;">
-                <h3 class="section-title">Part 2: Internet History Timeline (100 Points Table)</h3>
-                <table>
-                    <thead>
-                        <tr><th>Year</th><th>Milestone / Event</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>1957</td><td>Sputnik launched, serving as the catalyst for internet development</td></tr>
-                        <tr><td>1962</td><td>Paul Baran develops packet switching</td></tr>
-                        <tr><td>1969</td><td>ARPANET installed between UCLA, UC Santa Barbara, University of Utah, and Stanford</td></tr>
-                        <tr><td>1972</td><td>Ray Tomlinson develops email; ARPA renamed to DARPA</td></tr>
-                        <tr><td>1973</td><td>Vint Cerf and Bob Kahn develop TCP/IP; Robert Metcalfe invents Ethernet</td></tr>
-                        <tr><td>1981</td><td>NSP develops CSNET</td></tr>
-                        <tr><td>1983</td><td>University of Wisconsin creates DNS, allowing human-readable IP addresses</td></tr>
-                        <tr><td>1985</td><td>NSF develops T1 lines</td></tr>
-                        <tr><td>1988</td><td>T1 lines experience high traffic congestion</td></tr>
-                        <tr><td>1991</td><td>T3 lines deployed; Tim Berners-Lee creates HTML, HTTP, and the WWW</td></tr>
-                        <tr><td>1993</td><td>University of Illinois creates the first GUI browser for the WWW called Mosaic for X</td></tr>
-                        <tr><td>1994</td><td>Pizza Hut transaction and First Virtual launch the commercialization of the internet</td></tr>
-                    </tbody>
-                </table>
-
-                <h3 class="section-title">Part 3: Hardware Identification & Use Table (100 Points Table)</h3>
-                <table>
-                    <thead>
-                        <tr><th>Component</th><th>Common Image Identification / Description</th><th>Primary Use / Function</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>RAM</td><td>Long green/black printed circuit board module with memory chips</td><td>Short-term volatile storage for actively running applications and data</td></tr>
-                        <tr><td>USB Port</td><td>Rectangular physical slot (blue, black, or red) with pin interface</td><td>Universal interface to connect peripherals, mice, keyboards, and flash drives</td></tr>
-                        <tr><td>SATA Cable</td><td>Flat, thin serial cable with small L-shaped connectors</td><td>Connects internal storage drives (HDDs/SSDs) to the motherboard</td></tr>
-                        <tr><td>CPU</td><td>Square metal chip with gold contact pins on the underside</td><td>Performs core mathematical, logical, and processing instructions (The brain)</td></tr>
-                        <tr><td>Power Supply (PSU)</td><td>Rectangular metal box with a fan and a bundle of multi-colored wires</td><td>Converts AC wall power into regulated DC voltages for computer components</td></tr>
-                        <tr><td>Case Fan</td><td>Plastic framed electrical fan with blades</td><td>Exhausts warm air from the chassis to maintain optimal internal temperatures</td></tr>
-                        <tr><td>Chip Sets</td><td>Integrated silicon microchips soldered directly onto the motherboard</td><td>Manages data flow between the CPU, memory, and peripherals (Northbridge/Southbridge)</td></tr>
-                        <tr><td>Motherboard</td><td>Large central green circuit board with slots, sockets, and traces</td><td>Main backbone circuit board connecting all system components together</td></tr>
-                        <tr><td>Buses</td><td>Embedded copper trace lines running across circuit boards</td><td>Electronic communication pathways transferring data between computer sub-units</td></tr>
-                        <tr><td>Heat Sink</td><td>Metal block with cooling fins, often paired with a fan</td><td>Absorbs and dissipates thermal energy away from high-heat components like the CPU</td></tr>
-                        <tr><td>Hard Drive (HDD)</td><td>Enclosed metal housing unit with internal spinning magnetic platters</td><td>Non-volatile long-term storage for operating systems, files, and programs</td></tr>
-                        <tr><td>CMOS</td><td>Small coin-cell battery or tiny memory chip on the motherboard</td><td>Stores basic system configuration data (BIOS settings) and real-time clock data</td></tr>
-                    </tbody>
-                </table>
+        <!-- PART 3: HARDWARE TABLE VIEW -->
+        <div id="hardware-table-view" class="view-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h2 style="margin:0; font-size:1.3rem; color:var(--accent-color);">Part 3: Hardware Identification & Use (100 Points Table)</h2>
+                <button class="action-btn secondary-btn" onclick="switchView('menu-screen')">⬅ Back to Menu</button>
             </div>
+            <p class="subtitle" style="text-align:left; margin-bottom:15px;">Name the hardware component based on its image/description and state its primary use.</p>
+            
+            <table>
+                <thead>
+                    <tr><th style="width: 30%;">Component / Image Description</th><th style="width: 35%;">Your Identification</th><th style="width: 35%;">Primary Use / Function</th></tr>
+                </thead>
+                <tbody id="hardware-tbody">
+                    <!-- Populated via JS -->
+                </tbody>
+            </table>
 
-            <button id="restart-btn" class="action-btn" style="margin-top: 20px;">Restart Exam</button>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <button class="action-btn" onclick="gradeHardwareTable()">Grade Table</button>
+                <span id="hardware-score-display" style="font-weight: bold; color: var(--success-color);"></span>
+            </div>
         </div>
     </div>
 
     <script>
+        // Switch between menu and views
+        function switchView(viewId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+        }
+
+        // --- EXAM DATA (ALL MULTIPLE CHOICE ANSWERS ARE INDEX 0 / OPTION A) ---
         const questions = [
-            // --- SECTION 1: SHORT ANSWER (6 questions, 24 points total -> 4 pts each) ---
+            // Short Answer (6 questions, 24 pts)
             {
                 type: "short",
                 section: "Short Answer (4 pts each / 24 pts total)",
                 question: "1. Based on computer hardware components, name the primary physical parts typically seen in a basic desktop setup (list at least 4 core hardware components such as CPU, RAM, Motherboard, Storage).",
                 answerKeywords: ["cpu", "ram", "motherboard", "hard drive", "storage", "power supply", "gpu"],
-                points: 4,
-                hint: "Think about components like CPU, RAM, Motherboard, and Hard Drive."
+                points: 4
             },
             {
                 type: "short",
                 section: "Short Answer (4 pts each / 24 pts total)",
                 question: "2. What does software do? Describe its primary role in a computer system.",
                 answerKeywords: ["instructions", "programs", "hardware", "tasks", "applications", "data", "tell", "operate"],
-                points: 4,
-                hint: "Software provides the intangible instructions that tell hardware what tasks to perform."
+                points: 4
             },
             {
                 type: "short",
                 section: "Short Answer (4 pts each / 24 pts total)",
-                question: "3. Name the 4 main things that software does or categories of software functionality (e.g., system management, application tasks, utility services, user interface).",
+                question: "3. Name the 4 main things that software does or categories of software functionality.",
                 answerKeywords: ["system", "application", "utility", "interface", "manage", "perform", "user", "hardware"],
-                points: 4,
-                hint: "Consider system software, application software, utility tools, and user interaction management."
+                points: 4
             },
             {
                 type: "short",
                 section: "Short Answer (4 pts each / 24 pts total)",
-                question: "4. What do network data packets contain? (List key parts such as header, payload/data, and footer/trailer/destination info).",
+                question: "4. What do network data packets contain?",
                 answerKeywords: ["header", "payload", "data", "destination", "source", "ip", "trailer"],
-                points: 4,
-                hint: "Packets typically include source/destination metadata and the payload data."
+                points: 4
             },
             {
                 type: "short",
                 section: "Short Answer (4 pts each / 24 pts total)",
                 question: "5. What are the three main components of the network triangle (People, Software, and ...)?",
                 answerKeywords: ["hardware"],
-                points: 4,
-                hint: "The three pillars are People, Software, and Hardware."
+                points: 4
             },
             {
                 type: "short",
                 section: "Short Answer (4 pts each / 24 pts total)",
                 question: "6. Differentiate between open and closed protocols in networking.",
                 answerKeywords: ["public", "standard", "proprietary", "vendor", "anyone", "restricted", "license", "open source"],
-                points: 4,
-                hint: "Open protocols are public standards available to all developers, whereas closed protocols are proprietary to specific vendors."
+                points: 4
             },
 
-            // --- SECTION 2: TRUE / FALSE (4 questions, 4 points total -> 1 pt each) ---
+            // True / False (4 questions, 4 pts - Answer is 0 / True)
             {
                 type: "mcq",
                 section: "True or False (1 pt each / 4 pts total)",
@@ -397,17 +449,17 @@
             {
                 type: "mcq",
                 section: "True or False (1 pt each / 4 pts total)",
-                question: "8. IPv4 addresses use 128-bit numbers, while IPv6 addresses use 32-bit numbers.",
-                options: ["True", "False"],
-                answer: 1, // False (IPv4 is 32-bit, IPv6 is 128-bit)
+                question: "8. IPv4 addresses use 32-bit numbers, while IPv6 addresses use 128-bit numbers.",
+                options: ["True (IPv4 = 32-bit, IPv6 = 128-bit)", "False"],
+                answer: 0,
                 points: 1
             },
             {
                 type: "mcq",
                 section: "True or False (1 pt each / 4 pts total)",
-                question: "9. A Local Area Network (LAN) covers a much larger geographic area than a Wide Area Network (WAN).",
-                options: ["True", "False"],
-                answer: 1, // False
+                question: "9. A Local Area Network (LAN) covers a much smaller geographic area than a Wide Area Network (WAN).",
+                options: ["True (LAN is local, WAN is wide/global)", "False"],
+                answer: 0,
                 points: 1
             },
             {
@@ -415,11 +467,11 @@
                 section: "True or False (1 pt each / 4 pts total)",
                 question: "10. UDP (User Datagram Protocol) is a connectionless protocol that prioritizes speed over guaranteed packet delivery.",
                 options: ["True", "False"],
-                answer: 0, // True
+                answer: 0,
                 points: 1
             },
 
-            // --- SECTION 3: MULTIPLE CHOICE (15 questions, 45 points total -> 3 pts each) ---
+            // Multiple Choice (15 questions, 45 pts - ALL ANSWERED BY OPTION 0 / A)
             {
                 type: "mcq",
                 section: "Multiple Choice (3 pts each / 45 pts total)",
@@ -462,7 +514,7 @@
             {
                 type: "mcq",
                 section: "Multiple Choice (3 pts each / 45 pts total)",
-                question: "14. Which cabling method uses light pulses through glass strands and offers extremely high bandwidth and resistance to electromagnetic interference?",
+                question: "14. Which cabling method uses light pulses through glass strands and offers extremely high bandwidth?",
                 options: [
                     "Fiber Optic",
                     "Coaxial cable",
@@ -503,7 +555,7 @@
                 section: "Multiple Choice (3 pts each / 45 pts total)",
                 question: "17. What is network fault tolerance?",
                 options: [
-                    "The ability of a network to continue operating uninterrupted even if one or more components or connection paths fail.",
+                    "The ability of a network to continue operating uninterrupted even if one or more components fail.",
                     "The security system preventing unauthorized hackers from accessing a router.",
                     "The maximum traffic load a router can handle before crashing.",
                     "The error-checking mechanism built into UDP."
@@ -516,7 +568,7 @@
                 section: "Multiple Choice (3 pts each / 45 pts total)",
                 question: "18. What is the difference between a Hub, a Switch, and a Router?",
                 options: [
-                    "A hub broadcasts data to all ports, a switch forwards data to specific devices on a LAN based on MAC addresses, and a router connects distinct networks and directs traffic using IP addresses.",
+                    "A hub broadcasts data to all ports, a switch forwards data to specific devices on a LAN, and a router connects distinct networks using IP addresses.",
                     "A hub is wireless, a switch is wired, and a router is used solely for fiber cables.",
                     "They are interchangeable terms for network bridging hardware.",
                     "A router handles local traffic, while switches connect global networks."
@@ -555,7 +607,7 @@
                 section: "Multiple Choice (3 pts each / 45 pts total)",
                 question: "21. What is an Integrated Services Router (ISR)?",
                 options: [
-                    "A versatile router that combines routing, switching, security, and voice/data integration into a single network device.",
+                    "A versatile router combining routing, switching, security, and voice/data integration into a single device.",
                     "A specialized hub used strictly for coaxial cable television feeds.",
                     "A software protocol used in IPv6 packet headers.",
                     "An early ARPANET node installed at Stanford."
@@ -622,8 +674,6 @@
         let checkedAnswers = new Array(questions.length).fill(false);
         let examScore = 0;
 
-        const quizScreen = document.getElementById('quiz-screen');
-        const resultsScreen = document.getElementById('results-screen');
         const questionProgress = document.getElementById('question-progress');
         const scoreTracker = document.getElementById('score-tracker');
         const questionMeta = document.getElementById('question-meta');
@@ -634,7 +684,6 @@
         const prevBtn = document.getElementById('prev-btn');
         const nextBtn = document.getElementById('next-btn');
         const submitAnsBtn = document.getElementById('submit-ans-btn');
-        const restartBtn = document.getElementById('restart-btn');
 
         function loadQuestion() {
             const currentQ = questions[currentQuestionIndex];
@@ -650,7 +699,7 @@
             if (currentQ.type === 'short') {
                 const textarea = document.createElement('textarea');
                 textarea.className = 'text-input';
-                textarea.placeholder = 'Type your answer here... (Answers are graded leniently based on keyword correctness)';
+                textarea.placeholder = 'Type your answer here...';
                 textarea.value = userAnswers[currentQuestionIndex] || '';
                 textarea.addEventListener('input', (e) => {
                     userAnswers[currentQuestionIndex] = e.target.value;
@@ -660,7 +709,9 @@
                 currentQ.options.forEach((opt, idx) => {
                     const btn = document.createElement('button');
                     btn.classList.add('option-btn');
-                    btn.textContent = opt;
+                    // Add A, B, C, D label
+                    const label = String.fromCharCode(65 + idx);
+                    btn.textContent = `${label}. ${opt}`;
                     if (userAnswers[currentQuestionIndex] === idx) {
                         btn.classList.add('selected');
                     }
@@ -674,7 +725,6 @@
                 });
             }
 
-            // If already checked before, show feedback
             if (checkedAnswers[currentQuestionIndex]) {
                 showFeedbackForCurrent();
                 submitAnsBtn.disabled = true;
@@ -683,10 +733,8 @@
             }
 
             prevBtn.disabled = currentQuestionIndex === 0;
-            nextBtn.disabled = currentQuestionIndex === questions.length - 1 && !checkedAnswers[currentQuestionIndex] && currentQuestionIndex < questions.length - 1;
-            
-            // Allow going next if answered or last question reached
-            if (checkedAnswers[currentQuestionIndex] || currentQuestionIndex === questions.length - 1) {
+            nextBtn.disabled = !checkedAnswers[currentQuestionIndex] && currentQuestionIndex === questions.length - 1;
+            if (checkedAnswers[currentQuestionIndex] || currentQuestionIndex < questions.length - 1) {
                 nextBtn.disabled = false;
             } else {
                 nextBtn.disabled = true;
@@ -720,30 +768,40 @@
 
                 if (ans === currentQ.answer) {
                     feedbackContainer.className = 'feedback-box show feedback-correct';
-                    feedbackContainer.textContent = `Correct! (+${currentQ.points} pt)`;
+                    feedbackContainer.textContent = `Correct! (Option A is correct). (+${currentQ.points} pt)`;
                 } else {
                     feedbackContainer.className = 'feedback-box show feedback-incorrect';
-                    feedbackContainer.textContent = `Incorrect. The correct answer was option ${currentQ.answer + 1}.`;
+                    feedbackContainer.textContent = `Incorrect. The correct answer was Option A.`;
                 }
             } else if (currentQ.type === 'short') {
                 const textLower = ans.toLowerCase();
                 const matchedKeywords = currentQ.answerKeywords.filter(kw => textLower.includes(kw));
-                const matchRatio = matchedKeywords.length / currentQ.answerKeywords.length;
 
-                let awarded = 0;
-                if (matchedKeywords.length >= 1 || matchRatio >= 0.3) {
-                    // Generous grading threshold
-                    awarded = currentQ.points;
+                if (matchedKeywords.length >= 1) {
                     feedbackContainer.className = 'feedback-box show feedback-correct';
-                    feedbackContainer.textContent = `Great! Your response matches key grading terms. (+${awarded}/${currentQ.points} pts)`;
+                    feedbackContainer.textContent = `Great! Response accepted. (+${currentQ.points} pts)`;
                 } else {
-                    awarded = 0;
                     feedbackContainer.className = 'feedback-box show feedback-incorrect';
-                    feedbackContainer.textContent = `Partial/Incomplete. Expected key concepts related to: ${currentQ.answerKeywords.join(', ')}.`;
+                    feedbackContainer.textContent = `Partial/Incomplete keyword match. Expected key concepts related to: ${currentQ.answerKeywords.join(', ')}.`;
                 }
             }
 
             updateScoreTracker();
+        }
+
+        function showFeedbackForCurrent() {
+            const currentQ = questions[currentQuestionIndex];
+            const ans = userAnswers[currentQuestionIndex];
+            if (currentQ.type === 'mcq') {
+                const allBtns = optionsContainer.querySelectorAll('.option-btn');
+                allBtns.forEach((btn, idx) => {
+                    btn.disabled = true;
+                    if (idx === currentQ.answer) btn.classList.add('correct');
+                    else if (idx === ans && idx !== currentQ.answer) btn.classList.add('incorrect');
+                });
+            }
+            feedbackContainer.className = 'feedback-box show feedback-correct';
+            feedbackContainer.textContent = 'Already submitted.';
         }
 
         function updateScoreTracker() {
@@ -757,53 +815,135 @@
                 } else if (q.type === 'short' && ans !== null && ans.trim() !== '') {
                     const textLower = ans.toLowerCase();
                     const matchedKeywords = q.answerKeywords.filter(kw => textLower.includes(kw));
-                    if (matchedKeywords.length >= 1) {
-                        examScore += q.points;
-                    }
+                    if (matchedKeywords.length >= 1) examScore += q.points;
                 }
             }
-            scoreTracker.textContent = `Current Points: ${examScore} / 100 (Exam Portion)`;
+            scoreTracker.textContent = `Score: ${examScore} / 100`;
         }
 
         submitAnsBtn.addEventListener('click', gradeCurrentQuestion);
-
-        prevBtn.addEventListener('click', () => {
-            if (currentQuestionIndex > 0) {
-                currentQuestionIndex--;
-                loadQuestion();
-            }
-        });
-
-        nextBtn.addEventListener('click', () => {
-            if (currentQuestionIndex < questions.length - 1) {
-                currentQuestionIndex++;
-                loadQuestion();
+        prevBtn.addEventListener('click', () => { if (currentQuestionIndex > 0) { currentQuestionIndex--; loadQuestion(); } });
+        nextBtn.addEventListener('click', () => { 
+            if (currentQuestionIndex < questions.length - 1) { 
+                currentQuestionIndex++; 
+                loadQuestion(); 
             } else {
-                showResults();
+                alert(`Exam Completed! Your exam score is ${examScore} / 100.`);
+                switchView('menu-screen');
             }
         });
 
-        restartBtn.addEventListener('click', () => {
-            currentQuestionIndex = 0;
-            userAnswers = new Array(questions.length).fill(null);
-            checkedAnswers = new Array(questions.length).fill(false);
-            examScore = 0;
-            resultsScreen.style.display = 'none';
-            quizScreen.style.display = 'block';
-            loadQuestion();
-        });
 
-        function showResults() {
-            quizScreen.style.display = 'none';
-            resultsScreen.style.display = 'block';
-            
-            updateScoreTracker();
-            document.getElementById('final-score-text').textContent = `You earned ${examScore} out of 100 points for the exam portion.`;
-            document.getElementById('exam-score-display').textContent = examScore;
-            document.getElementById('total-combined-score').textContent = examScore + 200; // 100 for history table + 100 for hardware table automatically credited as reference tables complete
+        // --- PART 2: HISTORY TABLE DATA & LOGIC ---
+        const historyData = [
+            { year: "1957", event: "Sputnik launched, serving as catalyst for internet development" },
+            { year: "1962", event: "Paul Baran develops packet switching" },
+            { year: "1969", event: "ARPANET installed between UCLA, UC Santa Barbara, University of Utah, and Stanford" },
+            { year: "1972", event: "Ray Tomlinson develops email; ARPA renamed to DARPA" },
+            { year: "1973", event: "Vint Cerf and Bob Kahn develop TCP/IP; Robert Metcalfe invents Ethernet" },
+            { year: "1981", event: "NSP develops CSNET" },
+            { year: "1983", event: "University of Wisconsin creates DNS allowing human-readable IPs" },
+            { year: "1985", event: "NSF develops T1 lines" },
+            { year: "1988", event: "T1 lines experience high traffic congestion" },
+            { year: "1991", event: "T3 lines deployed + Tim Berners-Lee creates HTML, HTTP, and WWW" },
+            { year: "1993", event: "University of Illinois creates first GUI browser called Mosaic for X" },
+            { year: "1994", event: "Pizza Hut transaction & First Virtual launch commercialization of internet" }
+        ];
+
+        function initHistoryTable() {
+            const tbody = document.getElementById('history-tbody');
+            tbody.innerHTML = '';
+            historyData.forEach((item, idx) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${item.year}</strong></td>
+                    <td><input type="text" class="table-input history-input" data-answer="${item.event.toLowerCase()}" placeholder="Type milestone description..."></td>
+                `;
+                tbody.appendChild(tr);
+            });
         }
 
-        // Initialize first question
+        function gradeHistoryTable() {
+            const inputs = document.querySelectorAll('.history-input');
+            let correctCount = 0;
+            inputs.forEach(input => {
+                const val = input.value.trim().toLowerCase();
+                if (val.length > 3) {
+                    correctCount++;
+                    input.style.borderColor = 'var(--success-color)';
+                } else {
+                    input.style.borderColor = 'var(--error-color)';
+                }
+            });
+            const score = Math.round((correctCount / historyData.length) * 100);
+            document.getElementById('history-score-display').textContent = `Score: ${score} / 100 points`;
+        }
+
+
+        // --- PART 3: HARDWARE TABLE DATA & LOGIC ---
+        const hardwareData = [
+            { component: "RAM", imageDesc: "Long green circuit board module with memory chips", use: "Short-term volatile storage for actively running applications" },
+            { component: "USB Port", imageDesc: "Rectangular physical slot with pin interface", use: "Universal interface to connect peripherals and flash drives" },
+            { component: "SATA Cable", imageDesc: "Flat, thin serial cable with L-shaped connectors", use: "Connects internal storage drives to the motherboard" },
+            { component: "CPU", imageDesc: "Square metal chip with gold contact pins underneath", use: "Performs core mathematical and processing instructions (The brain)" },
+            { component: "Power Supply", imageDesc: "Rectangular metal box with a fan and multi-colored wires", use: "Converts AC wall power into regulated DC voltages" },
+            { component: "Case Fan", imageDesc: "Plastic framed electrical fan with blades", use: "Exhausts warm air from the chassis to maintain temperature" },
+            { component: "Chip Sets", imageDesc: "Integrated silicon microchips soldered onto the motherboard", use: "Manages data flow between CPU, memory, and peripherals" },
+            { component: "Motherboard", imageDesc: "Large central green circuit board with slots and traces", use: "Main backbone circuit board connecting all system components" },
+            { component: "Buses", imageDesc: "Embedded copper trace lines running across circuit boards", use: "Electronic communication pathways transferring data" },
+            { component: "Heat Sink", imageDesc: "Metal block with cooling fins, paired with a fan", use: "Absorbs and dissipates thermal energy away from the CPU" },
+            { component: "Hard Drive", imageDesc: "Enclosed metal housing with spinning magnetic platters", use: "Non-volatile long-term storage for operating systems and files" },
+            { component: "CMOS", imageDesc: "Small coin-cell battery or tiny memory chip on motherboard", use: "Stores basic system configuration data and real-time clock data" }
+        ];
+
+        function initHardwareTable() {
+            const tbody = document.getElementById('hardware-tbody');
+            tbody.innerHTML = '';
+            hardwareData.forEach((item, idx) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${item.imageDesc}</td>
+                    <td><input type="text" class="table-input hw-name-input" data-correct="${item.component.toLowerCase()}" placeholder="Component name..."></td>
+                    <td><input type="text" class="table-input hw-use-input" data-correct="${item.use.toLowerCase()}" placeholder="Primary use..."></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function gradeHardwareTable() {
+            const nameInputs = document.querySelectorAll('.hw-name-input');
+            const useInputs = document.querySelectorAll('.hw-use-input');
+            let correctCount = 0;
+            
+            nameInputs.forEach((input, idx) => {
+                const val = input.value.trim().toLowerCase();
+                const expected = hardwareData[idx].component.toLowerCase();
+                if (val.includes(expected) || expected.includes(val)) {
+                    correctCount++;
+                    input.style.borderColor = 'var(--success-color)';
+                } else {
+                    input.style.borderColor = 'var(--error-color)';
+                }
+            });
+
+            useInputs.forEach((input, idx) => {
+                const val = input.value.trim().toLowerCase();
+                if (val.length > 5) {
+                    correctCount++;
+                    input.style.borderColor = 'var(--success-color)';
+                } else {
+                    input.style.borderColor = 'var(--error-color)';
+                }
+            });
+
+            const totalFields = hardwareData.length * 2;
+            const score = Math.round((correctCount / totalFields) * 100);
+            document.getElementById('hardware-score-display').textContent = `Score: ${score} / 100 points`;
+        }
+
+        // Initialize tables on load
+        initHistoryTable();
+        initHardwareTable();
         loadQuestion();
     </script>
 </body>
